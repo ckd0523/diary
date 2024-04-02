@@ -19,27 +19,26 @@ public class SecurityConfig {
     MemberService memberService;
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.formLogin()
-                .loginPage("/members/login")
-                .defaultSuccessUrl("/")
-                .usernameParameter("email")
-                .failureUrl("/members/login/error")
-                .and()
-                .logout()
-                .logoutRequestMatcher(new AntPathRequestMatcher("/members/logout"))
-                .logoutSuccessUrl("/")
-        ;
-
-        http.authorizeRequests()
-                .requestMatchers("/css/**", "/js/**", "/img/**").permitAll()
-                .requestMatchers("/", "/members/**", "/item/**", "/images/**").permitAll()
-                .requestMatchers("/admin/**").hasRole("ADMIN")
-                .anyRequest().authenticated()
-        ;
-
-        http.exceptionHandling()
-                .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
-        ;
+        http
+                .formLogin((formLogin)->
+                        formLogin
+                            .loginPage("/members/login")
+                            .defaultSuccessUrl("/")
+                            .usernameParameter("email")
+                            .failureUrl("/members/login/error")
+                )
+                .logout((logoutConfig)->
+                        logoutConfig
+                            .logoutRequestMatcher(new AntPathRequestMatcher("/members/logout"))
+                            .logoutSuccessUrl("/")
+                        )
+                .authorizeRequests((authorizeRequests)->
+                        authorizeRequests
+                            .requestMatchers("/css/**", "/js/**", "/img/**").permitAll()
+                            .requestMatchers("/", "/members/**", "/item/**", "/images/**").permitAll()
+                            .requestMatchers("/admin/**").hasRole("ADMIN")
+                            .anyRequest().authenticated()
+                        );
 
         return http.build();
     }
