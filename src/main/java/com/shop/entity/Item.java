@@ -7,6 +7,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name="item")
@@ -15,6 +16,13 @@ import java.time.LocalDateTime;
 @ToString
 public class Item {
 
+    @ManyToMany
+    @JoinTable(
+            name="member_item",
+            joinColumns = @JoinColumn(name = "member_id"),
+            inverseJoinColumns = @JoinColumn(name = "item_id")
+    )
+    private List<Member> member;
 
     @Id
     @Column(name="item_id")
