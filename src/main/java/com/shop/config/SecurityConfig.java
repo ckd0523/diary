@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
@@ -20,13 +21,21 @@ public class SecurityConfig {
     protected void configure(HttpSecurity http) throws Exception{
 
     }
-    */
 
     @Bean
     AuthenticationManager authenticationManager(
             HttpSecurity http) throws Exception {
 
         return null;
+    }
+    */
+
+    @Bean
+    SecurityFilterChain filterChain(HttpSecurity http)throws Exception{
+        http
+                .authorizeHttpRequests((authorizeHttpRequests)->authorizeHttpRequests
+                        .requestMatchers(new AntPathRequestMatcher("/**")).permitAll());
+        return http.build();
     }
 
     @Bean

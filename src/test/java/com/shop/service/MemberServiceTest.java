@@ -11,6 +11,7 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 @Transactional
@@ -43,6 +44,21 @@ public class MemberServiceTest {
         assertEquals(member.getAddress(), saveMember.getAddress());
         assertEquals(member.getPassword(), saveMember.getPassword());
         assertEquals(member.getRole(), saveMember.getRole());
+    }
+
+    @Test
+    @DisplayName("중복 회원 가입 테스트")
+    public void saveDuplicateMemberRTest(){
+
+        Member member1 = createMember();
+        Member member2 = createMember();
+        memberService.saveMember(member1);
+
+        Throwable e = assertThrows(IllegalStateException.class, ()->{
+            memberService.saveMember(member2);});
+
+        assertEquals("이미 가입된 회원입니다.", e.getMessage());
+
     }
 
 }
