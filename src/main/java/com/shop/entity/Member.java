@@ -5,13 +5,15 @@ import com.shop.dto.MemberFormDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Entity
-@Table
+@Table(name = "member")
 @Getter
 @Setter
-public class Member {
+@ToString
+public class Member extends BaseEntity {
 
     @Id
     @Column(name = "member_id")

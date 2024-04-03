@@ -4,21 +4,27 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 
 @Entity
 @Table(name = "cart")
 @Getter
 @Setter
 @ToString
-public class Cart {
+@Slf4j
+public class Cart extends BaseEntity {
 
     @Id
     @Column(name="cart_id")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="member_id")
     private Member member;
 
+
+    public void aadassad(){
+        log.info(""   + "asdasdasd");
+    }
 }
