@@ -8,7 +8,7 @@ import lombok.Setter;
 @Table(name="item_img")
 @Getter
 @Setter
-public class ItemImg extends BaseEntity{
+public class ItemImg extends BaseEntity {
 
     @Id
     @Column(name = "item_img_id")
@@ -31,9 +31,6 @@ public class ItemImg extends BaseEntity{
         this.oriImgName = oriImgName;
         this.imgName = imgName;
         this.imgUrl = imgUrl;
-
-
-
     }
 
 }
