@@ -21,7 +21,7 @@ public interface ItemRepository extends JpaRepository<Item, Long>, QuerydslPredi
 
     List<Item> findByPriceBetween(Integer A, Integer B);
 
-    List<Item> findByIdGreaterThanEqual(Integer id);
+    List<Item> findByIdGreaterThanEqual(Long id);
 
     List<Item> findByIdGreaterThanEqualAndIdLessThan(Integer A, Integer B);
 
