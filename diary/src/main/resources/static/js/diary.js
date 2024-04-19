@@ -1,15 +1,27 @@
+
+let editor;
+
+ClassicEditor
+    .create( document.querySelector( '#editor' ) )
+    .then( newEditor => {
+        editor = newEditor;
+    } )
+    .catch( error => {
+        console.error( error );
+    } );
+
 // 삭제 기능
 const deleteButton = document.getElementById("delete-btn");
 
 if(deleteButton){
     deleteButton.addEventListener("click", event => {
-        let id = document.getElementById('article-id').value;
-        fetch(`/api/articles/${id}`, {
+        let id = document.getElementById('diaryId').value;
+        fetch(`/api/diaries/${id}`, {
             method: 'DELETE'
         })
             .then(()=>{
-                alert("Deleted");
-                location.replace('/articles');
+                alert("아쉬워요 ㅠㅠ");
+                location.replace('/calendar');
             });
     });
 }
@@ -22,20 +34,20 @@ if(modifyButton){
     modifyButton.addEventListener("click", event => {
         let params = new URLSearchParams(location.search);
         let id = params.get("id");
-
-        fetch(`/api/articles/${id}`, {
-            method: 'POST',
+        const editorData = editor.getData();
+        fetch(`/api/diaries/${id}`, {
+            method: 'PUT',
             headers : {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
                 title: document.getElementById("title").value,
-                content: document.getElementById("content").value,
+                content: editorData,
             })
         })
             .then(() => {
-                alert("Modify");
-                location.replace(`/articles/${id}`);
+                alert("아차차,,,");
+                location.replace(`/diaries/${id}`);
             });
     });
 }
@@ -45,18 +57,20 @@ if(modifyButton){
 const createButton = document.getElementById("create-btn");
 if(createButton){
     createButton.addEventListener("click", event => {
-        fetch("/api/articles", {
+        const editorData = editor.getData();
+        fetch("/api/diaries", {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
                 title: document.getElementById("title").value,
-                content: document.getElementById("content").value,
+                content: editorData,
+                date: document.getElementById("date").value,
             }),
         }).then(() => {
-            alert("Create");
-            location.replace(`/articles`);
+            alert( document.getElementById("date").value + "일도 수고했어요!!");
+            location.replace("/calendar");
         });
     });
 }

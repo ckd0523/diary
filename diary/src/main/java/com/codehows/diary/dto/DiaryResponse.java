@@ -10,10 +10,10 @@ import java.util.Date;
 @Getter
 public class DiaryResponse {
 
-    private final Long id;
     private final String title;
     private final String content;
     private final LocalDate date;
+    private final Long id;
 
     public DiaryResponse(Diary diary) {
         this.id = diary.getId();

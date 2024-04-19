@@ -29,10 +29,16 @@ public class Diary {
     private LocalDate date;
 
     @Builder
-    public Diary(String title, String content, LocalDate date) {
+    public Diary(Long id, String title, String content, LocalDate date) {
+        this.id = id;
         this.title = title;
         this.content = content;
         this.date = date;
+    }
+
+    public void update(String title, String content) {
+        this.title = title;
+        this.content = content;
     }
 
 }

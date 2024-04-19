@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>일기</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <script src="https://cdn.ckeditor.com/ckeditor5/41.3.1/classic/ckeditor.js"></script>
+    <script>
+        ClassicEditor
+            .create( document.querySelector( '#editor' ) )
+            .catch( error => {
+                console.error( error );
+            } );
+    </script>
+</head>
+<body>
+
+<div class="p-5 mb-5 text-center</> bg-light">
+    <h1 class="mb-3">My Diary</h1>
+    <h4 class="mb-3" th:text="|${date}, 하루는 어땠나요?|"></h4>
+</div>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-lg-8">
+            <diary>
+                <!-- 아이디 정보 저장 -->
+                <input type="hidden" id="diary-id" th:value="${diary.id}">
+                <input type="hidden" id="date" th:value="${date}">
+                <header class="mb-4">
+                    <input type="text" class="form-control" placeholder="제목" id="title" th:value="${diary.title}">
+                </header>
+                <section class="mb-5">
+                    <textarea class="form-control h-25" rows="10" placeholder="내용" id="editor" th:utext="${diary.content}"></textarea>
+                    <!-- <textarea class="form-control h-25" rows="10" placeholder="내용" id="content" th:text="${diary.content}"></textarea> -->
+                </section>
+                <!-- id가 있을 떄는 [수정] 버튼을, 없을 때는 [등록] 버튼이 보이게 함 -->
+                <button th:if="${diary.id} != null" type="button" id="modify-btn" class="btn btn-primary btn-sm">수정</button>
+                <button th:if="${diary.id} == null" type="button" id="create-btn" class="btn btn-primary btn-sm">등록</button>
+                <button type="button" class="btn btn-light btn-sm" th:onclick="|location.href='@{/calendar}'|">캘린더</button>
+                <button type="button" class="btn btn-success btn-sm" th:onclick="|location.href='@{/diaries}'|">일기 목록</button>
+                <button type="button" class="btn btn-warning btn-sm" th:onclick="|location.href='@{/logout}'|">LogOut</button>
+            </diary>
+        </div>
+    </div>
+</div>
+<script src="/js/diary.js"></script>
+</body>
+</html>

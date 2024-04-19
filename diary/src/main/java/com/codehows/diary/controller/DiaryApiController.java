@@ -4,10 +4,12 @@ package com.codehows.diary.controller;
 import com.codehows.diary.Entity.Diary;
 import com.codehows.diary.dto.AddDiaryRequest;
 import com.codehows.diary.dto.DiaryResponse;
+import com.codehows.diary.dto.UpdateDiaryRequest;
 import com.codehows.diary.service.DiaryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,9 +22,7 @@ public class DiaryApiController {
 
     @PostMapping("/api/diaries")
     public ResponseEntity<Diary> addDiary(@RequestBody AddDiaryRequest request) {
-
         Diary savedDiary = diaryService.save(request);
-
         return ResponseEntity.status(HttpStatus.CREATED).body(savedDiary);
 
     }
@@ -40,7 +40,6 @@ public class DiaryApiController {
     // URL 경로에서 값 추출
     public ResponseEntity<DiaryResponse> findDiaryById(@PathVariable Long id) {
         Diary diary = diaryService.findById(id);
-
         return ResponseEntity.ok().body(new DiaryResponse(diary));
     }
 
@@ -48,6 +47,13 @@ public class DiaryApiController {
     public ResponseEntity<Void> deleteDiary(@PathVariable Long id) {
         diaryService.delete(id);
         return ResponseEntity.ok().build();
+    }
+
+
+    @PutMapping("/api/diaries/{id}")
+    public ResponseEntity<DiaryResponse> updateDiary(@PathVariable Long id, @RequestBody UpdateDiaryRequest request) {
+        Diary updateDiary = diaryService.update(id, request);
+        return ResponseEntity.ok().body(new DiaryResponse(updateDiary));
     }
 
 }

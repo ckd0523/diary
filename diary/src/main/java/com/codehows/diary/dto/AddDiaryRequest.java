@@ -13,7 +13,6 @@ import java.util.Date;
 @Getter
 public class AddDiaryRequest {
 
-    private Long id;
     private String title;
     private String content;
     private LocalDate date;
