@@ -4,6 +4,9 @@ import com.codehows.diary.service.UserDetailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.ProviderManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -37,6 +40,7 @@ public class WebSecurityConfig {
                         formLogin
                                 .loginPage("/login")
                                 .defaultSuccessUrl("/calendar")
+                                .usernameParameter("email")
                 )
                 .logout(logout ->
                         logout
@@ -49,11 +53,12 @@ public class WebSecurityConfig {
         return http.build();
     }
 
-//    @Bean
-//    public AuthenticationManager authenticationManager(AuthenticationManagerBuilder auth, BCryptPasswordEncoder bCryptPasswordEncoder, UserDetailService userDetailService) throws Exception {
-//        auth.userDetailsService(userService).passwordEncoder(bCryptPasswordEncoder);
-//        return auth.build();
-//    }
+    public AuthenticationManager authenticationManager() throws Exception {
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        authProvider.setUserDetailsService(userService);
+        authProvider.setPasswordEncoder(bCryptPasswordEncoder());
+        return new ProviderManager(authProvider);
+    }
 
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
