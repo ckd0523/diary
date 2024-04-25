@@ -55,6 +55,15 @@ public class MainController {
         return "newDiary";
     }
 
+    @GetMapping("/grid")
+    public String grid(){
+        return "grid";
+    }
+
+    @GetMapping("/chart")
+    public String chart(){
+        return "chart";
+    }
 
 
 }

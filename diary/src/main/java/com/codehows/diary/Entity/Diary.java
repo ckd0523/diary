@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
 import java.util.Date;
@@ -13,6 +14,7 @@ import java.util.Date;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@EntityListeners(AuditingEntityListener.class)
 public class Diary {
 
     @Id
@@ -28,8 +30,12 @@ public class Diary {
 
     private LocalDate date;
 
+    @Column(name = "author", nullable = false)
+    private String author;
+
     @Builder
-    public Diary(Long id, String title, String content, LocalDate date) {
+    public Diary(String author, Long id, String title, String content, LocalDate date) {
+        this.author = author;
         this.id = id;
         this.title = title;
         this.content = content;

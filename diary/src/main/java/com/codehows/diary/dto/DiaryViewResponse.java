@@ -15,12 +15,14 @@ public class DiaryViewResponse {
     private String title;
     private String content;
     private LocalDate date;
+    private String author;
 
     public DiaryViewResponse(Diary diary) {
         this.id = diary.getId();
         this.title = diary.getTitle();
         this.content = diary.getContent();
         this.date = diary.getDate();
+        this.author = diary.getAuthor();
     }
 
 

@@ -17,11 +17,12 @@ public class AddDiaryRequest {
     private String content;
     private LocalDate date;
 
-    public Diary toEntity() {
+    public Diary toEntity(String author) {
         return Diary.builder()
                 .title(title)
                 .content(content)
                 .date(date)
+                .author(author)
                 .build();
     }
 

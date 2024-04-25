@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -21,8 +22,8 @@ public class DiaryApiController {
     private final DiaryService diaryService;
 
     @PostMapping("/api/diaries")
-    public ResponseEntity<Diary> addDiary(@RequestBody AddDiaryRequest request) {
-        Diary savedDiary = diaryService.save(request);
+    public ResponseEntity<Diary> addDiary(@RequestBody AddDiaryRequest request, Principal principal) {
+        Diary savedDiary = diaryService.save(request, principal.getName());
         return ResponseEntity.status(HttpStatus.CREATED).body(savedDiary);
 
     }

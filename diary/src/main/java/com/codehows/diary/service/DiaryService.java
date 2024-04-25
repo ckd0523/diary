@@ -16,8 +16,8 @@ public class DiaryService {
 
     private final DiaryRepository diaryRepository;
 
-    public Diary save(AddDiaryRequest request) {
-        return diaryRepository.save(request.toEntity());
+    public Diary save(AddDiaryRequest request, String userName) {
+        return diaryRepository.save(request.toEntity(userName));
     }
 
     public List<Diary> findAll() {

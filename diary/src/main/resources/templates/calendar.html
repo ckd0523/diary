@@ -22,12 +22,19 @@
                         click: function() {
                             location.replace(`/logout`);
                         }
+                    },
+                    gridButton: {
+                        text: 'Grid',
+                        click: function() {
+                            location.replace(`/grid`);
+                        }
                     }
+
                 },
                 headerToolbar: {
                     left: 'prev,next today',
                     center: 'title',
-                    right: 'myCustomButton logoutButton'
+                    right: 'myCustomButton logoutButton gridButton'
                 },
                 titleFormat : function(date) {
                     return date.date.year + '년 ' + (parseInt(date.date.month) + 1) + '월';

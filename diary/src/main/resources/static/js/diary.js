@@ -1,14 +1,44 @@
+const Editor = toastui.Editor;
+const editor = new Editor({
+    el: document.querySelector('#editor'),
+    height: '600px',
+    initialEditType: 'wysiwyg', // 최초로 보여줄 에디터 타입 (markdown || wysiwyg)
+    placeholder: '내용을 입력해주세요.',
+    previewStyle: 'vertical', // 마크다운 프리뷰 스타일 (tab || vertical)
+    /* start of hooks */
+    hooks: {
+        async addImageBlobHook(blob, callback) { // 이미지 업로드 로직 커스텀
+            try {
+                /*
+                 * 1. 에디터에 업로드한 이미지를 FormData 객체에 저장
+                 *    (이때, 컨트롤러 uploadEditorImage 메서드의 파라미터인 'image'와 formData에 append 하는 key('image')값은 동일해야 함)
+                 */
+                const formData = new FormData();
+                formData.append('image', blob);
 
-let editor;
+                // 2. FileApiController - uploadEditorImage 메서드 호출
+                const response = await fetch('/tui-editor/image-upload', {
+                    method: 'POST',
+                    body: formData,
+                });
 
-ClassicEditor
-    .create( document.querySelector( '#editor' ) )
-    .then( newEditor => {
-        editor = newEditor;
-    } )
-    .catch( error => {
-        console.error( error );
-    } );
+                // 3. 컨트롤러에서 전달받은 디스크에 저장된 파일명
+                const filename = await response.text();
+                console.log('서버에 저장된 파일명 : ', filename);
+
+                // 4. addImageBlobHook의 callback 함수를 통해, 디스크에 저장된 이미지를 에디터에 렌더링
+                const imageUrl = `/tui-editor/image-print?filename=${filename}`;
+                callback(imageUrl, 'image alt attribute');
+
+            } catch (error) {
+                console.error('업로드 실패 : ', error);
+            }
+        },
+
+    }
+});
+editor.setHTML(document.getElementById('diary-content').value)
+
 
 // 삭제 기능
 const deleteButton = document.getElementById("delete-btn");
@@ -34,7 +64,7 @@ if(modifyButton){
     modifyButton.addEventListener("click", event => {
         let params = new URLSearchParams(location.search);
         let id = params.get("id");
-        const editorData = editor.getData();
+
         fetch(`/api/diaries/${id}`, {
             method: 'PUT',
             headers : {
@@ -42,7 +72,7 @@ if(modifyButton){
             },
             body: JSON.stringify({
                 title: document.getElementById("title").value,
-                content: editorData,
+                content: editor.getHTML(),
             })
         })
             .then(() => {
@@ -57,7 +87,6 @@ if(modifyButton){
 const createButton = document.getElementById("create-btn");
 if(createButton){
     createButton.addEventListener("click", event => {
-        const editorData = editor.getData();
         fetch("/api/diaries", {
             method: 'POST',
             headers: {
@@ -65,7 +94,7 @@ if(createButton){
             },
             body: JSON.stringify({
                 title: document.getElementById("title").value,
-                content: editorData,
+                content: editor.getHTML(),
                 date: document.getElementById("date").value,
             }),
         }).then(() => {
